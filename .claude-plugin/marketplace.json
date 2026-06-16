@@ -1,0 +1,11 @@
+{
+  "name": "patrek-ai-plugins",
+  "owner": {
+    "name": "Patrick Turcotte"
+  },
+  "metadata": {
+    "description": "Curated AI CLI plugins by Patrick Turcotte (Claude Code).",
+    "version": "1.0.0"
+  },
+  "plugins": []
+}
