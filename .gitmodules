@@ -1,3 +1,0 @@
-[submodule "plugins/copilot-warp"]
-	path = plugins/copilot-warp
-	url = https://github.com/patrek/copilot-warp.git

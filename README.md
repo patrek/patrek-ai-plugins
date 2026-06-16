@@ -2,7 +2,8 @@
 
 A centralized [plugin marketplace](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/plugins-marketplace)
 for AI coding CLIs. Plugins live in their own repositories and are federated here
-as git submodules under `plugins/`.
+by reference: each registry entry's `source` points at the plugin's own GitHub
+repository, pinned to a tag.
 
 Two scoped registries are maintained so each tool only sees plugins it can run:
 
@@ -34,34 +35,39 @@ copilot plugin list
 
 ## Cloning
 
-This repo uses submodules. Clone with:
-
 ```bash
-git clone --recurse-submodules https://github.com/patrek/patrek-ai-plugins.git
-# or, after a plain clone:
-git submodule update --init --recursive
+git clone https://github.com/patrek/patrek-ai-plugins.git
 ```
 
 ## Adding a plugin
 
-1. Add the plugin's repository as a submodule:
+1. Add an entry to the appropriate registry file (`.github/plugin/marketplace.json`
+   for Copilot, `.claude-plugin/marketplace.json` for Claude) with a `source` object
+   pointing at the plugin's own repository, pinned to a tag:
 
-   ```bash
-   git submodule add https://github.com/<owner>/<repo>.git plugins/<name>
+   ```json
+   {
+     "name": "<name>",
+     "description": "...",
+     "version": "<x.y.z>",
+     "source": {
+       "source": "github",
+       "repo": "<owner>/<repo>",
+       "ref": "v<x.y.z>"
+     }
+   }
    ```
 
-2. Add an entry to the appropriate registry file (`.github/plugin/marketplace.json`
-   for Copilot, `.claude-plugin/marketplace.json` for Claude), pointing `source`
-   at `./plugins/<name>`.
+   Add `"path": "<subdir>"` if the plugin's `plugin.json` is not at the repo root.
 
-3. Commit the submodule and the registry change together.
+2. Keep the registry entry's `version` and the `ref` tag aligned with the plugin's
+   own `plugin.json` version. Commit the registry change.
 
 ## Updating a plugin to a new release
 
-```bash
-git -C plugins/<name> fetch --tags
-git -C plugins/<name> checkout <tag-or-commit>
-git add plugins/<name>
-```
+Bump the `ref` (and matching `version`) in the registry file to the new tag, then
+commit. The new tag must already exist in the plugin's own repository.
 
-Then bump the plugin's `version` in the registry file to match and commit.
+```json
+"source": { "source": "github", "repo": "<owner>/<repo>", "ref": "v<x.y.z>" }
+```

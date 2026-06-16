@@ -12,7 +12,11 @@
       "name": "warp-notifications",
       "description": "Native Warp terminal notifications for GitHub Copilot CLI via the warp://cli-agent protocol.",
       "version": "0.1.0",
-      "source": "./plugins/copilot-warp"
+      "source": {
+        "source": "github",
+        "repo": "patrek/copilot-warp",
+        "ref": "v0.1.0"
+      }
     }
   ]
 }
